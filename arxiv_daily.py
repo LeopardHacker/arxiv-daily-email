@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 from email.header import Header
 from email.mime.text import MIMEText
+from email.utils import formataddr
 from typing import Iterable
 
 import arxiv
@@ -121,8 +122,9 @@ def build_email_content(papers: Iterable[dict[str, str]], target_date: date) -> 
 
 def send_email(config: EmailConfig, content: str, target_date: date) -> None:
     msg = MIMEText(content, "plain", "utf-8")
-    msg["Subject"] = Header(f"arXiv Daily - {target_date}", "utf-8").encode()
-    msg["From"] = Header("arXiv Daily Bot", "utf-8").encode()
+    msg["Subject"] = str(Header(f"arXiv Daily - {target_date}", "utf-8"))
+    from_name = (os.getenv("FROM_NAME") or "arXiv Daily Bot").strip()
+    msg["From"] = formataddr((str(Header(from_name, "utf-8")), config.from_email))
     msg["To"] = ", ".join(config.to_emails)
 
     with smtplib.SMTP_SSL(config.smtp_server, config.smtp_port) as server:
