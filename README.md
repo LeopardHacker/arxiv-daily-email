@@ -17,7 +17,10 @@ Required environment variables:
 
 Optional:
 
+- `FROM_NAME`: display name used in the `From:` header
 - `DRY_RUN=1`: print email content instead of sending
+- `ARXIV_PAGE_SIZE`: arXiv API page size (1..2000)
+- `MAX_EMAIL_CHARS`: split into multiple emails when content is large
 
 ## GitHub Actions
 
