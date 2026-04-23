@@ -2,30 +2,35 @@ name: arXiv Daily Email
 
 on:
   schedule:
-    - cron: "0 23 * * *"  # 北京时间 每天早上7点
-  workflow_dispatch:      # 允许手动测试运行
+    # 23:00 UTC == 07:00 (UTC+8, Beijing/Shanghai) the next day
+    - cron: "0 23 * * *"
+  workflow_dispatch: {}
 
 jobs:
   run:
     runs-on: ubuntu-latest
     env:
-      # 强制使用 Node24，消除警告
+      # Avoid Node version deprecation warnings from GitHub-hosted actions.
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
-      - name: 拉取代码
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: 设置 Python
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: 安装依赖
+      - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: 运行脚本并发送邮件
+      - name: Run and send email
         env:
           FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           TO_EMAIL: ${{ secrets.TO_EMAIL }}
-        run: python arxiv-daily-email/arxiv-daily.py
+          # Optional override, e.g.:
+          # ARXIV_QUERY: 'cat:cs.CL AND submittedDate:[20260423 TO 20260423]'
+          ARXIV_QUERY: ${{ secrets.ARXIV_QUERY }}
+        run: python arxiv_daily.py
+
