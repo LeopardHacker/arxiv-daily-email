@@ -17,7 +17,6 @@ Required environment variables:
 
 Optional:
 
-- `ARXIV_QUERY`: override the arXiv API query string
 - `DRY_RUN=1`: print email content instead of sending
 
 ## GitHub Actions
@@ -27,4 +26,3 @@ Set repository secrets:
 - `FROM_EMAIL`
 - `EMAIL_PASSWORD`
 - `TO_EMAIL`
-- (optional) `ARXIV_QUERY`

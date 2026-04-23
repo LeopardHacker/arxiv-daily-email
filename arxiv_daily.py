@@ -67,13 +67,8 @@ def yesterday_utc() -> date:
 def build_query(target_date: date) -> str:
     """
     arXiv API query string.
-    - Default: all cs.* papers submitted on target_date (UTC).
-    - Override: set ARXIV_QUERY to a full query string.
+    Fetch all cs.* papers submitted on target_date (UTC).
     """
-    custom = (os.getenv("ARXIV_QUERY") or "").strip()
-    if custom:
-        return custom
-
     ymd = target_date.strftime("%Y%m%d")
     return f"submittedDate:[{ymd}0000 TO {ymd}2359] AND cat:cs.*"
 

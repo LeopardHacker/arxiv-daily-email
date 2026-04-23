@@ -8,6 +8,7 @@ on:
 
 jobs:
   run:
+    environment: email-code
     runs-on: ubuntu-latest
     env:
       # Avoid Node version deprecation warnings from GitHub-hosted actions.
@@ -35,8 +36,4 @@ jobs:
           FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           TO_EMAIL: ${{ secrets.TO_EMAIL }}
-          # Optional override, e.g.:
-          # ARXIV_QUERY: 'cat:cs.CL AND submittedDate:[20260423 TO 20260423]'
-          ARXIV_QUERY: ${{ secrets.ARXIV_QUERY }}
         run: python arxiv_daily.py
-
