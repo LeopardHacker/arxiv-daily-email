@@ -10,9 +10,6 @@ jobs:
   run:
     environment: email-code
     runs-on: ubuntu-latest
-    env:
-      # Avoid Node version deprecation warnings from GitHub-hosted actions.
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -24,12 +21,6 @@ jobs:
 
       - name: Install dependencies
         run: pip install -r requirements.txt
-
-      - name: test ls
-        run: ls -al
-
-      - name: test ls ../
-        run: ls -al ../
 
       - name: Run and send email
         env:
