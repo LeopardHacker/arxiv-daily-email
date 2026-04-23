@@ -2,17 +2,20 @@ name: arXiv Daily Email
 
 on:
   schedule:
-    - cron: "0 23 * * *"
-  workflow_dispatch:
+    - cron: "0 23 * * *"  # 北京时间 每天早上7点
+  workflow_dispatch:      # 允许手动测试运行
 
 jobs:
   run:
     runs-on: ubuntu-latest
+    env:
+      # 强制使用 Node24，消除警告
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: 拉取代码
         uses: actions/checkout@v4
 
-      - name: 设置Python
+      - name: 设置 Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
@@ -20,9 +23,9 @@ jobs:
       - name: 安装依赖
         run: pip install -r requirements.txt
 
-      - name: 运行脚本发邮件
+      - name: 运行脚本并发送邮件
         env:
+          FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-          FROM_EMAIL: "你的QQ邮箱@qq.com"
-          TO_EMAIL: "123456@qq.com"
+          TO_EMAIL: ${{ secrets.TO_EMAIL }}
         run: python arxiv_daily.py
